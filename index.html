@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AR Marker Detection + Map plane</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+
+    <!-- Tap capture for AR (fallback when WebXR select doesn't fire) -->
+    <div id="tap-capture" style="display: none;"></div>
+
+    <!-- Top-left: trip switcher + tap details (placement mode OFF) -->
+    <div id="trip-panel" class="trip-panel">
+      <div id="trip-switcher" class="trip-switcher">
+        <button id="trip-prev" type="button" title="Previous trip">◀</button>
+        <span id="trip-label">Trip —</span>
+        <button id="trip-next" type="button" title="Next trip">▶</button>
+      </div>
+      <div id="trip-details" class="trip-details"></div>
+    </div>
+
+    <!-- Points count toggle: first + last + sampled middle (steps of ~50) -->
+    <div id="event-date-filter" style="display: none;">
+      <button id="event-date-prev">◀</button>
+      <span id="event-date-label">—</span>
+      <button id="event-date-next">▶</button>
+    </div>
+
+    <!-- Visibility toggles: map surface and guide timelines (shown in AR) -->
+    <div id="visibility-toggles" style="display: none;">
+      <button id="toggle-map-surface" type="button" class="visibility-toggle" title="Map surface">Map</button>
+      <button id="toggle-guide-timelines" type="button" class="visibility-toggle" title="Guide timelines">Timelines</button>
+      <button id="toggle-roads" type="button" class="visibility-toggle" title="Road overlay">Roads</button>
+    </div>
+    <button id="placement-toggle">Placement: ON</button>
+    <button id="enter-ar">Enter AR</button>
+    <div id="center-reticle"></div>
+
+    <!-- IF Unsupported browser/device -->
+    <div id="unsupported">
+      Your browser/ device does not support WebXR AR (`immersive-ar`).<br />
+      Try using Chrome on an Android device with ARCore support.
+    </div>
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.165.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.165.0/examples/jsm/"
+      }
+    }
+    </script>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

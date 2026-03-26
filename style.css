@@ -1,0 +1,266 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  pointer-events: none; /* let taps pass through to WebXR select */
+}
+/* Enter AR button, borrowed from https://github.com/immersive-web/webxr-samples/ */
+#enter-ar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  pointer-events: auto;
+  border-radius: 999px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  z-index: 10;
+  pointer-events: auto; /* keep button clickable */
+}
+
+#enter-ar[disabled] {
+  background: #4b5563;
+  cursor: not-allowed;
+}
+
+/* Below trip panel (switcher + optional tap details line) */
+#event-date-filter {
+  position: fixed;
+  top: 118px;
+  left: 16px;
+  z-index: 11;
+  background: rgba(15,23,42,0.9);
+  color: #e5e7eb;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+}
+
+#event-date-label {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+#event-date-prev,
+#event-date-next {
+  background: rgba(31,41,55,1);
+  color: #e5e7eb;
+  border: none;
+  border-radius: 999px;
+  padding: 2px 6px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+#unsupported {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #020617;
+  color: #e5e7eb;
+  padding: 24px;
+  text-align: center;
+  font-size: 15px;
+}
+
+#visibility-toggles {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 11;
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.visibility-toggle {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(15, 23, 42, 0.8);
+  color: #e5e7eb;
+  font-size: 12px;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+.visibility-toggle.off {
+  opacity: 0.5;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+#placement-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 16px;
+  pointer-events: auto;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(15, 23, 42, 0.8);
+  color: #e5e7eb;
+  font-size: 13px;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  z-index: 11;
+  display: none;
+  pointer-events: auto; /* keep button clickable */
+}
+
+.trip-panel {
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top, 0px));
+  left: max(16px, env(safe-area-inset-left, 0px));
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  max-width: calc(100vw - 32px);
+  pointer-events: none;
+}
+
+.trip-panel .trip-switcher {
+  pointer-events: auto;
+}
+
+.trip-switcher {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.trip-switcher button {
+  background: rgba(31, 41, 55, 1);
+  color: #e5e7eb;
+  border: none;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.trip-switcher button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+#trip-label {
+  min-width: 5.5rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.trip-details {
+  /* width: max-content avoids narrow column wrap (e.g. m/s) */
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.92);
+  color: #e5e7eb;
+  font-size: 14px;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+.trip-details.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+#center-reticle {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 26px;
+  height: 26px;
+  margin-left: -13px;
+  margin-top: -13px;
+  border: 2px solid rgba(255, 255, 255, 0.5); /* alpha value sets transparency */
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  z-index: 12;
+  display: none;
+}
+#center-reticle::before,
+#center-reticle::after {
+  content: "";
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5); /* alpha value sets transparency */
+}
+#center-reticle::before {
+  left: 50%;
+  top: 2px;
+  width: 2px;
+  height: 22px;
+  transform: translateX(-50%);
+}
+#center-reticle::after {
+  top: 50%;
+  left: 2px;
+  width: 22px;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+/* Full-screen tap capture for AR (fallback when WebXR select doesn't fire) */
+#tap-capture {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+/* Landscape: UI along edges so center stays clear for the map */
+@media (orientation: landscape) {
+  #event-date-filter {
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  #enter-ar {
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+
+  #placement-toggle {
+    top: 50%;
+    right: 8px;
+    bottom: auto;
+    transform: translateY(-50%);
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}

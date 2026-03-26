@@ -1,0 +1,17 @@
+{
+  "name": "one-trip-tap",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WebXR AR visualization of bus trip events and road overlays in Norrkoping.",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "echo \"No automated tests configured\""
+  },
+  "keywords": [
+    "webxr",
+    "ar",
+    "threejs"
+  ],
+  "author": "",
+  "license": "ISC"
+}
