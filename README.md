@@ -20,8 +20,7 @@ WebXR AR visualization for placing a city map in physical space and exploring:
 3. Tap **Enter AR** to begin placement and interaction.
 
 Personally I used ngrok to start an https server by running 
-- "npx http-server -p 8080" 
-(followed by)
+- "npx http-server -p 8080" first, followed by:
 - "npx ngrok http 8080"
 (in another terminal window)
 
