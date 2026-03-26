@@ -1,5 +1,7 @@
 # OneTripTap
 
+[![Open Site](https://img.shields.io/badge/Live-Demo-blue)](https://antonanderssonmedia.github.io/OneTripTap/)
+
 WebXR AR visualization for placing a city map in physical space and exploring:
 - bus trip events
 - date-filtered event points
